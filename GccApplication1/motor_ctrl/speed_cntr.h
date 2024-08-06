@@ -27,7 +27,8 @@
  *  Data is written to it by move(), when stepper motor is moving (timer
  *  interrupt running) data is read/updated when calculating a new step_delay
  */
-typedef struct {
+typedef struct
+{
   //! What part of the speed ramp we are in.
   unsigned char run_state : 3;
   //! Direction stepper motor should move.
@@ -50,40 +51,38 @@ typedef struct {
  * the timer1 frequency is the clock frequency divided by 8.
  */
 // Timer/Counter 1 running on 8000000 / 8 = 1MHz . (T1-FREQ 100000)
-#define T1_FREQ 125000
+#define T1_FREQ 1000000
 
 //! Number of (full)steps per round on stepper motor in use.
 #define FSPR 200
 
 #ifdef HALFSTEPS
-  #define SPR (FSPR*2)
-  #pragma message("[speed_cntr.c] *** Using Halfsteps ***")
+#define SPR (FSPR * 2)
 #endif
 #ifdef FULLSTEPS
-  #define SPR FSPR
-  #pragma message("[speed_cntr.c] *** Using Fullsteps ***")
+#define SPR FSPR
 #endif
 #ifndef HALFSTEPS
-  #ifndef FULLSTEPS
-    #error FULLSTEPS/HALFSTEPS not defined!
-  #endif
+#ifndef FULLSTEPS
+//#error FULLSTEPS/HALFSTEPS not defined!
+#endif
 #endif
 
 // Maths constants. To simplify maths when calculating in speed_cntr_Move().
-#define ALPHA (2*3.14159/SPR)                    // 2*pi/spr
-#define A_T_x100 ((long)(ALPHA*T1_FREQ*100))     // (ALPHA / T1_FREQ)*100
-#define T1_FREQ_148 ((int)((T1_FREQ*0.676)/100)) // divided by 100 and scaled by 0.676
-#define A_SQ (long)(ALPHA*2*10000000000)         // ALPHA*2*10000000000
-#define A_x20000 (int)(ALPHA*20000)              // ALPHA*20000
+#define ALPHA (2 * 3.14159 / SPR)                    // 2*pi/spr
+#define A_T_x100 ((long)(ALPHA * T1_FREQ * 100))     // (ALPHA / T1_FREQ)*100
+#define T1_FREQ_148 ((int)((T1_FREQ * 0.676) / 100)) // divided by 100 and scaled by 0.676
+#define A_SQ (long)(ALPHA * 2 * 10000000000)         // ALPHA*2*10000000000
+#define A_x20000 (int)(ALPHA * 20000)                // ALPHA*20000
 
 // Speed ramp states
-#define STOP  0
+#define STOP_M 0
 #define ACCEL 1
 #define DECEL 2
-#define RUN   3
+#define RUN 3
 
-void speed_cntr_Move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
-void speed_cntr_Init_Timer1(void);
+void speed_ctrl_Move(signed int step, unsigned int accel, unsigned int decel, unsigned int speed);
+void speed_ctrl_Init_Timer1(void);
 
 unsigned int min(unsigned int x, unsigned int y);
 

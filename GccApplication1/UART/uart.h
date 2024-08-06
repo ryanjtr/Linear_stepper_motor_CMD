@@ -26,7 +26,7 @@
 
 #define USART0_ENABLE
 #define USART1_ENABLE
-#define UART1_CONSOLE
+#define UART0_CONSOLE
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
